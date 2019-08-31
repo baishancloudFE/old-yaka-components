@@ -20,7 +20,7 @@
 		"babel-preset-stage-2": "^6.24.1"
 	},
 	"scripts": {
-		"dist": "babel --watch lib -d dist "
+		"dist": "rm -rf dist/* && babel lib -d dist --copy-files"
 	},
 	"files": [
 		"dist"

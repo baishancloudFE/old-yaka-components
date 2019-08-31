@@ -30,6 +30,10 @@ var _yakaMonthPicker = require('./yaka-MonthPicker/');
 
 var _yakaMonthPicker2 = _interopRequireDefault(_yakaMonthPicker);
 
+var _yakaServerSubarea = require('./yaka-ServerSubarea');
+
+var _yakaServerSubarea2 = _interopRequireDefault(_yakaServerSubarea);
+
 var _yakaRadio = require('./yaka-radio/');
 
 var _yakaUpload = require('./yaka-upload');
@@ -49,5 +53,6 @@ exports.default = {
 	Radio: _yakaRadio.Radio,
 	Links: _yakaLinks2.default,
 	Upload: _yakaUpload2.default,
-	MonthPicker: _yakaMonthPicker2.default
+	MonthPicker: _yakaMonthPicker2.default,
+	ServerSubarea: _yakaServerSubarea2.default
 };

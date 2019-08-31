@@ -1,0 +1,58 @@
+.select-group {
+    width: 100%;
+}
+
+.select-group .remark-pre {
+    white-space: pre;
+    background-color: #F7F7F7;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.select-group .action-text {
+    color: #1890FF;
+    cursor: pointer;
+}
+
+.select-group .group-card {
+    min-height: 130px;
+    margin-bottom: 10px;
+}
+
+.select-group .group-card .remove-icon {
+    margin-left: 5px;
+    cursor: pointer;
+    transition: .5s;
+}
+
+.select-group .group-card .remove-icon:hover {
+    color: #f5222d;
+}
+
+.select-group .group-card .ant-card-head {
+    min-height: 32px;
+    padding: 0 12px;
+}
+
+.select-group .group-card .ant-card-head-title {
+    padding: 8px 0;
+}
+
+.select-group .group-card .ant-card-body {
+    padding: 12px;
+}
+
+.select-group .group-card .ant-card-extra {
+    padding: 8px 0;
+}
+
+.select-group .group-tag {
+    margin-bottom: 10px;
+    background-color: transparent;
+    text-align: center;
+}
+
+.popover-style p {
+    margin: 0;
+    line-height: 30px;
+}
