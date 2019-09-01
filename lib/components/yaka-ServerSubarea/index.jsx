@@ -51,7 +51,6 @@ export default class SelectGroup extends React.Component {
   // 移动到分组响应事件
   menuOnClick = ({ key }) => {
     const { hostCheckedKeys, dataSource, groups } = this.state;
-    console.log(hostCheckedKeys);
     if (!hostCheckedKeys || hostCheckedKeys.length === 0) {
       return message.error("没有选择任何节点");
     }
@@ -193,8 +192,8 @@ export default class SelectGroup extends React.Component {
     });
 
     groups.forEach((item) => {
-      if (item.hosts) {
-        params.old_group[item.name] = [...item.hosts];
+      if (item.hosts && item.hosts.length !== 0) {
+        params.old_group[item.ename] = [...item.hosts];
       }
     });
 
@@ -216,7 +215,6 @@ export default class SelectGroup extends React.Component {
       });
     });
     const noModule = data.no_module;
-    console.log({ haveModule, noModule });
     return { haveModule, noModule };
   };
 
@@ -227,6 +225,7 @@ export default class SelectGroup extends React.Component {
       groups.push({
         id: Number(item.id),
         name: item.name,
+        ename: item.ename,
         hosts: item.hosts ? item.hosts : [],
         apps: item.apps ? item.apps : [],
         existing: "existing"
@@ -248,7 +247,7 @@ export default class SelectGroup extends React.Component {
   };
 
   componentWillMount() {
-    if(this.props.value){
+    if (this.props.value) {
       if (this.props.value.dividing_group && !this.state.dataSource.haveModule) {
         this.setState({
           dataSource: this.transportDataSource(this.props.value.dividing_group),
@@ -260,7 +259,7 @@ export default class SelectGroup extends React.Component {
   }
 
   componentWillReceiveProps(nextProps, nextContext) {
-    if(this.props.value) {
+    if (this.props.value) {
       if (nextProps.value.dividing_group && !this.state.dataSource.haveModule) {
         this.setState({
           dataSource: this.transportDataSource(nextProps.value.dividing_group),

@@ -149,7 +149,6 @@ var SelectGroup = function (_React$Component) {
           dataSource = _this$state.dataSource,
           groups = _this$state.groups;
 
-      console.log(hostCheckedKeys);
       if (!hostCheckedKeys || hostCheckedKeys.length === 0) {
         return _message3.default.error("没有选择任何节点");
       }
@@ -380,8 +379,8 @@ var SelectGroup = function (_React$Component) {
       });
 
       groups.forEach(function (item) {
-        if (item.hosts) {
-          params.old_group[item.name] = [].concat(_toConsumableArray(item.hosts));
+        if (item.hosts && item.hosts.length !== 0) {
+          params.old_group[item.ename] = [].concat(_toConsumableArray(item.hosts));
         }
       });
 
@@ -400,7 +399,6 @@ var SelectGroup = function (_React$Component) {
         });
       });
       var noModule = data.no_module;
-      console.log({ haveModule: haveModule, noModule: noModule });
       return { haveModule: haveModule, noModule: noModule };
     }, _this.transportGroup = function (data) {
       var groups = [];
@@ -408,6 +406,7 @@ var SelectGroup = function (_React$Component) {
         groups.push({
           id: Number(item.id),
           name: item.name,
+          ename: item.ename,
           hosts: item.hosts ? item.hosts : [],
           apps: item.apps ? item.apps : [],
           existing: "existing"
