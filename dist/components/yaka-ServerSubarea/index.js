@@ -88,10 +88,6 @@ var _react = require("react");
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = require("prop-types");
-
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
 require("./index.css");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -546,25 +542,29 @@ var SelectGroup = function (_React$Component) {
 
 
   _createClass(SelectGroup, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      if (this.props.value.dividing_group && !this.state.dataSource.haveModule) {
-        this.setState({
-          dataSource: this.transportDataSource(this.props.value.dividing_group),
-          apps: this.transportApp(this.props.value.app_list),
-          groups: this.transportGroup(this.props.value.existing_group)
-        });
+    key: "componentWillMount",
+    value: function componentWillMount() {
+      if (this.props.value) {
+        if (this.props.value.dividing_group && !this.state.dataSource.haveModule) {
+          this.setState({
+            dataSource: this.transportDataSource(this.props.value.dividing_group),
+            apps: this.transportApp(this.props.value.app_list),
+            groups: this.transportGroup(this.props.value.existing_group)
+          });
+        }
       }
     }
   }, {
-    key: "componentDidUpdate",
-    value: function componentDidUpdate(prevProps, prevState, snapshot) {
-      if (prevProps.value.dividing_group && !this.state.dataSource.haveModule) {
-        this.setState({
-          dataSource: this.transportDataSource(prevProps.value.dividing_group),
-          apps: this.transportApp(prevProps.value.app_list),
-          groups: this.transportGroup(prevProps.value.existing_group)
-        });
+    key: "componentWillReceiveProps",
+    value: function componentWillReceiveProps(nextProps, nextContext) {
+      if (this.props.value) {
+        if (nextProps.value.dividing_group && !this.state.dataSource.haveModule) {
+          this.setState({
+            dataSource: this.transportDataSource(nextProps.value.dividing_group),
+            apps: this.transportApp(nextProps.value.app_list),
+            groups: this.transportGroup(nextProps.value.existing_group)
+          });
+        }
       }
     }
   }, {
@@ -796,14 +796,6 @@ var SelectGroup = function (_React$Component) {
 
 exports.default = SelectGroup;
 
-
-SelectGroup.propTypes = {
-  value: _propTypes2.default.object,
-  nodeId: _propTypes2.default.number,
-  cache: _propTypes2.default.string,
-  onChange: _propTypes2.default.func,
-  remark: _propTypes2.default.string
-};
 
 SelectGroup.defaultProps = {
   value: {},

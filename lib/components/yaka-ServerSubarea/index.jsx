@@ -12,7 +12,6 @@ import {
   Popover,
   Select, Icon, Tooltip
 } from "igroot";
-import PropTypes from "prop-types";
 import "./index.css";
 
 export default class SelectGroup extends React.Component {
@@ -248,23 +247,27 @@ export default class SelectGroup extends React.Component {
     return apps;
   };
 
-  componentDidMount() {
-    if (this.props.value.dividing_group && !this.state.dataSource.haveModule) {
-      this.setState({
-        dataSource: this.transportDataSource(this.props.value.dividing_group),
-        apps: this.transportApp(this.props.value.app_list),
-        groups: this.transportGroup(this.props.value.existing_group),
-      });
+  componentWillMount() {
+    if(this.props.value){
+      if (this.props.value.dividing_group && !this.state.dataSource.haveModule) {
+        this.setState({
+          dataSource: this.transportDataSource(this.props.value.dividing_group),
+          apps: this.transportApp(this.props.value.app_list),
+          groups: this.transportGroup(this.props.value.existing_group),
+        });
+      }
     }
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    if (prevProps.value.dividing_group && !this.state.dataSource.haveModule) {
-      this.setState({
-        dataSource: this.transportDataSource(prevProps.value.dividing_group),
-        apps: this.transportApp(prevProps.value.app_list),
-        groups: this.transportGroup(prevProps.value.existing_group),
-      });
+  componentWillReceiveProps(nextProps, nextContext) {
+    if(this.props.value) {
+      if (nextProps.value.dividing_group && !this.state.dataSource.haveModule) {
+        this.setState({
+          dataSource: this.transportDataSource(nextProps.value.dividing_group),
+          apps: this.transportApp(nextProps.value.app_list),
+          groups: this.transportGroup(nextProps.value.existing_group),
+        });
+      }
     }
   }
 
@@ -323,6 +326,7 @@ export default class SelectGroup extends React.Component {
   ]);
 
   render() {
+
     const { haveModule = [], noModule = [] } = this.state.dataSource;
     const { hostCheckedKeys, groups, indeterminate, checkAll } = this.state;
     const { type, remark } = this.props;
@@ -492,14 +496,6 @@ export default class SelectGroup extends React.Component {
     ];
   }
 }
-
-SelectGroup.propTypes = {
-  value: PropTypes.object,
-  nodeId: PropTypes.number,
-  cache: PropTypes.string,
-  onChange: PropTypes.func,
-  remark: PropTypes.string,
-};
 
 SelectGroup.defaultProps = {
   value: {},
