@@ -56,6 +56,8 @@ var _message2 = require("igroot/lib/message");
 
 var _message3 = _interopRequireDefault(_message2);
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 require("igroot/lib/tag/style");
@@ -117,6 +119,7 @@ var SelectGroup = function (_React$Component) {
     return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = SelectGroup.__proto__ || Object.getPrototypeOf(SelectGroup)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
       hostCheckedKeys: [],
       groups: [],
+      apps: [],
       dataSource: {},
       appSelectKey: 0,
       indeterminate: false,
@@ -133,7 +136,9 @@ var SelectGroup = function (_React$Component) {
         apps: [],
         hosts: []
       });
-      _this.setState({ dataSource: dataSource });
+      _this.setState({ dataSource: dataSource }, function () {
+        _this.handleSubmit();
+      });
     }, _this.ipsOnCheck = function (checkedKeys) {
       var noModule = _this.state.dataSource.noModule;
 
@@ -184,6 +189,8 @@ var SelectGroup = function (_React$Component) {
         hostCheckedKeys: [],
         indeterminate: false,
         checkAll: false
+      }, function () {
+        _this.handleSubmit();
       });
     }, _this.removeTag = function (groupId, hostName) {
       var dataSource = _this.state.dataSource;
@@ -219,7 +226,9 @@ var SelectGroup = function (_React$Component) {
       }
 
       dataSource.noModule.push(hostName);
-      _this.setState({ dataSource: dataSource, hostCheckedKeys: [] });
+      _this.setState({ dataSource: dataSource, hostCheckedKeys: [] }, function () {
+        _this.handleSubmit();
+      });
     }, _this.choseAppSelect = function (value, groupId) {
       var dataSource = _this.state.dataSource;
       var _iteratorNormalCompletion2 = true;
@@ -227,15 +236,30 @@ var SelectGroup = function (_React$Component) {
       var _iteratorError2 = undefined;
 
       try {
-
-        for (var _iterator2 = dataSource.haveModule[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+        var _loop = function _loop() {
           var group = _step2.value;
 
           if (group.id === groupId) {
-            group.apps.push(value);
+            group.apps = [];
+            value.forEach(function (item) {
+              group.apps.push({
+                id: item.key,
+                name: item.label
+              });
+            });
             _message3.default.success("添加app成功");
-            return _this.setState({ dataSource: dataSource });
+            return {
+              v: _this.setState({ dataSource: dataSource }, function () {
+                _this.handleSubmit();
+              })
+            };
           }
+        };
+
+        for (var _iterator2 = dataSource.haveModule[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+          var _ret2 = _loop();
+
+          if ((typeof _ret2 === "undefined" ? "undefined" : _typeof(_ret2)) === "object") return _ret2.v;
         }
       } catch (err) {
         _didIteratorError2 = true;
@@ -265,7 +289,9 @@ var SelectGroup = function (_React$Component) {
         dataSource.noModule = dataSource.noModule.concat(groupItem.hosts);
       }
       dataSource.haveModule.splice(groupIndex, 1);
-      _this.setState({ dataSource: dataSource });
+      _this.setState({ dataSource: dataSource }, function () {
+        _this.handleSubmit();
+      });
     }, _this.clearGroupHosts = function (type, id) {
       var _this$state2 = _this.state,
           groups = _this$state2.groups,
@@ -278,13 +304,13 @@ var SelectGroup = function (_React$Component) {
 
         try {
           for (var _iterator3 = groups[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-            var group = _step3.value;
+            var _group = _step3.value;
 
-            if (group.id === id && group.hosts && group.hosts.length !== 0) {
+            if (_group.id === id && _group.hosts && _group.hosts.length !== 0) {
               var _dataSource$noModule;
 
-              (_dataSource$noModule = dataSource.noModule).push.apply(_dataSource$noModule, _toConsumableArray(group.hosts));
-              group.hosts = [];
+              (_dataSource$noModule = dataSource.noModule).push.apply(_dataSource$noModule, _toConsumableArray(_group.hosts));
+              _group.hosts = [];
               return _this.setState({ groups: groups, dataSource: dataSource });
             }
           }
@@ -310,14 +336,16 @@ var SelectGroup = function (_React$Component) {
 
       try {
         for (var _iterator4 = dataSource.haveModule[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-          var _group = _step4.value;
+          var _group2 = _step4.value;
 
-          if (_group.id === id && _group.hosts && _group.hosts.length !== 0) {
+          if (_group2.id === id && _group2.hosts && _group2.hosts.length !== 0) {
             var _dataSource$noModule2;
 
-            (_dataSource$noModule2 = dataSource.noModule).push.apply(_dataSource$noModule2, _toConsumableArray(_group.hosts));
-            _group.hosts = [];
-            _this.setState({ dataSource: dataSource });
+            (_dataSource$noModule2 = dataSource.noModule).push.apply(_dataSource$noModule2, _toConsumableArray(_group2.hosts));
+            _group2.hosts = [];
+            return _this.setState({ dataSource: dataSource }, function () {
+              _this.handleSubmit();
+            });
           }
         }
       } catch (err) {
@@ -345,17 +373,16 @@ var SelectGroup = function (_React$Component) {
     }, _this.handleSubmit = function () {
       var _this$state3 = _this.state,
           dataSource = _this$state3.dataSource,
-          groups = _this$state3.groups;
-      var _this$props = _this.props,
-          nodeId = _this$props.nodeId,
-          type = _this$props.type;
+          groups = _this$state3.groups,
+          nodeId = _this$state3.nodeId;
+      var type = _this.props.type;
 
 
       if (type === "cache") {
         if (dataSource.haveModule.some(function (v) {
           return !v.apps || v.apps.length === 0;
         })) {
-          return _message3.default.error("存在没有选择app的新建组");
+          return _message3.default.warn("存在没有选择app的新建组");
         }
       }
 
@@ -365,16 +392,15 @@ var SelectGroup = function (_React$Component) {
       params.old_group = {};
 
       dataSource.haveModule.forEach(function (item) {
-
         if (item.hosts && item.hosts.length !== 0) {
-          var group = {
+          var _group3 = {
             apps: [],
             hosts: [].concat(_toConsumableArray(item.hosts))
           };
           item.apps.forEach(function (app) {
-            group.apps.push(app.id);
+            _group3.apps.push(app.id);
           });
-          params.new_group.push(group);
+          params.new_group.push(_group3);
         }
       });
 
@@ -384,7 +410,14 @@ var SelectGroup = function (_React$Component) {
         }
       });
 
-      console.log("服务器预分组组件提交数据详情：", params);
+      params.extra_render = {
+        dataSource: dataSource,
+        apps: _this.state.apps,
+        groups: _this.state.groups
+      };
+
+      console.log("%c\u670D\u52A1\u5668\u9884\u5206\u7EC4\u7EC4\u4EF6\u63D0\u4EA4\u6570\u636E\u8BE6\u60C5", "color:#2f54eb");
+      console.log(params);
 
       _this.props.onChange(params);
     }, _this.transportDataSource = function (data) {
@@ -478,7 +511,7 @@ var SelectGroup = function (_React$Component) {
                   defaultValue: item.apps.map(function (v) {
                     return { label: v.name, key: v.id };
                   }),
-                  onSelect: function onSelect(value) {
+                  onChange: function onChange(value) {
                     return _this.choseAppSelect(value, item.id);
                   }
                 },
@@ -541,14 +574,29 @@ var SelectGroup = function (_React$Component) {
 
 
   _createClass(SelectGroup, [{
-    key: "componentWillMount",
-    value: function componentWillMount() {
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      console.log("%cDidMount", "color:#1890FF");
+      console.log("%c" + JSON.stringify(this.props.value), "color:#F5222D");
       if (this.props.value) {
-        if (this.props.value.dividing_group && !this.state.dataSource.haveModule) {
+        if (this.props.value.extra_render) {
+          var _props$value$extra_re = this.props.value.extra_render,
+              dataSource = _props$value$extra_re.dataSource,
+              groups = _props$value$extra_re.groups,
+              apps = _props$value$extra_re.apps,
+              nodeId = _props$value$extra_re.nodeId;
+
+          this.setState({ dataSource: dataSource, groups: groups, apps: apps, nodeId: nodeId });
+        } else if (this.props.value.dividing_group && !this.props.extra_render) {
           this.setState({
             dataSource: this.transportDataSource(this.props.value.dividing_group),
             apps: this.transportApp(this.props.value.app_list),
-            groups: this.transportGroup(this.props.value.existing_group)
+            groups: this.transportGroup(this.props.value.existing_group),
+            nodeId: this.props.value.node_id
+          }, function () {
+            _this2.handleSubmit();
           });
         }
       }
@@ -556,12 +604,27 @@ var SelectGroup = function (_React$Component) {
   }, {
     key: "componentWillReceiveProps",
     value: function componentWillReceiveProps(nextProps, nextContext) {
+      var _this3 = this;
+
+      console.log("%cReceiveProps", "color:#1890FF");
+      console.log("%c" + JSON.stringify(nextProps.value), "color:#F5222D");
       if (this.props.value) {
-        if (nextProps.value.dividing_group && !this.state.dataSource.haveModule) {
+        if (nextProps.value.extra_render) {
+          var _nextProps$value$extr = nextProps.value.extra_render,
+              dataSource = _nextProps$value$extr.dataSource,
+              groups = _nextProps$value$extr.groups,
+              apps = _nextProps$value$extr.apps,
+              nodeId = _nextProps$value$extr.nodeId;
+
+          this.setState({ dataSource: dataSource, groups: groups, apps: apps, nodeId: nodeId });
+        } else if (nextProps.value.dividing_group && !nextProps.extra_render) {
           this.setState({
             dataSource: this.transportDataSource(nextProps.value.dividing_group),
             apps: this.transportApp(nextProps.value.app_list),
-            groups: this.transportGroup(nextProps.value.existing_group)
+            groups: this.transportGroup(nextProps.value.existing_group),
+            nodeId: nextProps.value.node_id
+          }, function () {
+            _this3.handleSubmit();
           });
         }
       }
@@ -569,7 +632,7 @@ var SelectGroup = function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this2 = this;
+      var _this4 = this;
 
       var _state$dataSource = this.state.dataSource,
           _state$dataSource$hav = _state$dataSource.haveModule,
@@ -634,14 +697,6 @@ var SelectGroup = function (_React$Component) {
                 "span",
                 { className: "action-text", onClick: this.insertGroup.bind(this) },
                 "\u65B0\u589E\u5206\u7EC4"
-              ), _react2.default.createElement(_divider2.default, { type: "vertical" }), _react2.default.createElement(
-                "span",
-                {
-                  className: "action-text",
-                  style: { color: "#f5222d" },
-                  onClick: this.handleSubmit.bind(this)
-                },
-                "\u4FDD\u5B58"
               )]
             },
             _react2.default.createElement(
@@ -703,7 +758,7 @@ var SelectGroup = function (_React$Component) {
                 ),
                 className: "group-card",
                 key: "group-card-" + index,
-                extra: type === "cache" && _this2.oldGroupAppRender(item)
+                extra: type === "cache" && _this4.oldGroupAppRender(item)
               },
               item.hosts && item.hosts.map(function (host, index) {
                 return _react2.default.createElement(
@@ -713,7 +768,7 @@ var SelectGroup = function (_React$Component) {
                     key: item.name + "-" + host + "-" + index,
                     closable: true,
                     onClose: function onClose() {
-                      return _this2.removeTag(item.id, host);
+                      return _this4.removeTag(item.id, host);
                     }
                   },
                   host
@@ -734,7 +789,7 @@ var SelectGroup = function (_React$Component) {
                   title: item.name,
                   className: "group-card",
                   key: "group-card-" + index,
-                  extra: type === "cache" && _this2.newGroupAppRender(item)
+                  extra: type === "cache" && _this4.newGroupAppRender(item)
                 },
                 item.hosts.map(function (host, index) {
                   return _react2.default.createElement(
@@ -744,7 +799,7 @@ var SelectGroup = function (_React$Component) {
                       key: item.name + "-" + host + "-" + index,
                       closable: true,
                       onClose: function onClose() {
-                        return _this2.removeTag(item.id, host);
+                        return _this4.removeTag(item.id, host);
                       }
                     },
                     host
@@ -766,7 +821,7 @@ var SelectGroup = function (_React$Component) {
                   title: item.name,
                   className: "group-card",
                   key: "group-card-" + index,
-                  extra: type === "cache" && _this2.newGroupAppRender(item)
+                  extra: type === "cache" && _this4.newGroupAppRender(item)
                 },
                 item.hosts.map(function (host, index) {
                   return _react2.default.createElement(
@@ -776,7 +831,7 @@ var SelectGroup = function (_React$Component) {
                       key: item.name + "-" + host + "-" + index,
                       closable: true,
                       onClose: function onClose() {
-                        return _this2.removeTag(item.id, host);
+                        return _this4.removeTag(item.id, host);
                       }
                     },
                     host
@@ -798,7 +853,6 @@ exports.default = SelectGroup;
 
 SelectGroup.defaultProps = {
   value: {},
-  nodeId: 0,
   type: "cache",
   remark: "",
   onChange: function onChange() {}
