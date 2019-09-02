@@ -19,6 +19,7 @@ export default class SelectGroup extends React.Component {
   state = {
     hostCheckedKeys: [],
     groups: [],
+    apps: [],
     dataSource: {},
     appSelectKey: 0,
     indeterminate: false,
@@ -35,7 +36,9 @@ export default class SelectGroup extends React.Component {
       apps: [],
       hosts: [],
     });
-    this.setState({ dataSource });
+    this.setState({ dataSource }, () => {
+      this.handleSubmit();
+    });
   };
 
   // 原始组内多选框点击事件
@@ -80,6 +83,8 @@ export default class SelectGroup extends React.Component {
       hostCheckedKeys: [],
       indeterminate: false,
       checkAll: false,
+    }, () => {
+      this.handleSubmit();
     });
   };
 
@@ -94,7 +99,9 @@ export default class SelectGroup extends React.Component {
       }
     }
     dataSource.noModule.push(hostName);
-    this.setState({ dataSource, hostCheckedKeys: [] });
+    this.setState({ dataSource, hostCheckedKeys: [] }, () => {
+      this.handleSubmit();
+    });
   };
 
   // 新增组选择app
@@ -103,9 +110,17 @@ export default class SelectGroup extends React.Component {
 
     for(const group of dataSource.haveModule) {
       if (group.id === groupId) {
-        group.apps.push(value);
+        group.apps = [];
+        value.forEach((item) => {
+          group.apps.push({
+            id: item.key,
+            name: item.label
+          });
+        });
         message.success("添加app成功");
-        return this.setState({ dataSource: dataSource });
+        return this.setState({ dataSource: dataSource }, () => {
+          this.handleSubmit();
+        });
       }
     }
   };
@@ -124,7 +139,9 @@ export default class SelectGroup extends React.Component {
       dataSource.noModule = dataSource.noModule.concat(groupItem.hosts);
     }
     dataSource.haveModule.splice(groupIndex, 1);
-    this.setState({ dataSource });
+    this.setState({ dataSource }, () => {
+      this.handleSubmit();
+    });
   };
 
   // 清空组内所有服务器
@@ -144,7 +161,9 @@ export default class SelectGroup extends React.Component {
       if (group.id === id && group.hosts && group.hosts.length !== 0) {
         dataSource.noModule.push(...group.hosts);
         group.hosts = [];
-        this.setState({ dataSource });
+        return this.setState({ dataSource }, () => {
+          this.handleSubmit();
+        });
       }
     }
 
@@ -162,12 +181,12 @@ export default class SelectGroup extends React.Component {
 
   // 提交事件
   handleSubmit = () => {
-    const { dataSource, groups } = this.state;
-    const { nodeId, type } = this.props;
+    const { dataSource, groups, nodeId } = this.state;
+    const { type } = this.props;
 
     if (type === "cache") {
       if (dataSource.haveModule.some(v => !v.apps || v.apps.length === 0)) {
-        return message.error("存在没有选择app的新建组");
+        return message.warn("存在没有选择app的新建组");
       }
     }
 
@@ -176,9 +195,7 @@ export default class SelectGroup extends React.Component {
     params.new_group = [];
     params.old_group = {};
 
-
     dataSource.haveModule.forEach((item) => {
-
       if (item.hosts && item.hosts.length !== 0) {
         const group = {
           apps: [],
@@ -197,7 +214,14 @@ export default class SelectGroup extends React.Component {
       }
     });
 
-    console.log("服务器预分组组件提交数据详情：", params);
+    params.extra_render = {
+      dataSource: dataSource,
+      apps: this.state.apps,
+      groups: this.state.groups,
+    };
+
+    console.log(`%c服务器预分组组件提交数据详情`, "color:#2f54eb");
+    console.log(params);
 
     this.props.onChange(params);
   };
@@ -246,25 +270,41 @@ export default class SelectGroup extends React.Component {
     return apps;
   };
 
-  componentWillMount() {
+  componentDidMount() {
+    console.log("%cDidMount", "color:#1890FF");
+    console.log(`%c${JSON.stringify(this.props.value)}`, "color:#F5222D");
     if (this.props.value) {
-      if (this.props.value.dividing_group && !this.state.dataSource.haveModule) {
+      if (this.props.value.extra_render) {
+        const { dataSource, groups, apps, nodeId } = this.props.value.extra_render;
+        this.setState({ dataSource, groups, apps, nodeId });
+      } else if (this.props.value.dividing_group && !this.props.extra_render) {
         this.setState({
           dataSource: this.transportDataSource(this.props.value.dividing_group),
           apps: this.transportApp(this.props.value.app_list),
           groups: this.transportGroup(this.props.value.existing_group),
+          nodeId: this.props.value.node_id,
+        }, () => {
+          this.handleSubmit();
         });
       }
     }
   }
 
   componentWillReceiveProps(nextProps, nextContext) {
+    console.log("%cReceiveProps", "color:#1890FF");
+    console.log(`%c${JSON.stringify(nextProps.value)}`, "color:#F5222D");
     if (this.props.value) {
-      if (nextProps.value.dividing_group && !this.state.dataSource.haveModule) {
+      if (nextProps.value.extra_render) {
+        const { dataSource, groups, apps, nodeId } = nextProps.value.extra_render;
+        this.setState({ dataSource, groups, apps, nodeId });
+      } else if (nextProps.value.dividing_group && !nextProps.extra_render) {
         this.setState({
           dataSource: this.transportDataSource(nextProps.value.dividing_group),
           apps: this.transportApp(nextProps.value.app_list),
           groups: this.transportGroup(nextProps.value.existing_group),
+          nodeId: nextProps.value.node_id,
+        }, () => {
+          this.handleSubmit();
         });
       }
     }
@@ -305,7 +345,7 @@ export default class SelectGroup extends React.Component {
               defaultValue={item.apps.map(v => {
                 return { label: v.name, key: v.id };
               })}
-              onSelect={(value) => this.choseAppSelect(value, item.id)}
+              onChange={(value) => this.choseAppSelect(value, item.id)}
             >
               {
                 this.state.apps.map((app) => (
@@ -364,14 +404,6 @@ export default class SelectGroup extends React.Component {
                 </Dropdown>,
                 <Divider type="vertical" />,
                 <span className="action-text" onClick={this.insertGroup.bind(this)}>新增分组</span>,
-                <Divider type="vertical" />,
-                <span
-                  className="action-text"
-                  style={{ color: "#f5222d" }}
-                  onClick={this.handleSubmit.bind(this)}
-                >
-                  保存
-                </span>,
               ]
             }
           >
@@ -498,7 +530,6 @@ export default class SelectGroup extends React.Component {
 
 SelectGroup.defaultProps = {
   value: {},
-  nodeId: 0,
   type: "cache",
   remark: "",
   onChange: () => {
