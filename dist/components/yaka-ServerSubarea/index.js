@@ -413,7 +413,8 @@ var SelectGroup = function (_React$Component) {
       params.extra_render = {
         dataSource: dataSource,
         apps: _this.state.apps,
-        groups: _this.state.groups
+        groups: _this.state.groups,
+        nodeId: _this.state.nodeId
       };
 
       console.log("%c\u670D\u52A1\u5668\u9884\u5206\u7EC4\u7EC4\u4EF6\u63D0\u4EA4\u6570\u636E\u8BE6\u60C5", "color:#2f54eb");

@@ -218,6 +218,7 @@ export default class SelectGroup extends React.Component {
       dataSource: dataSource,
       apps: this.state.apps,
       groups: this.state.groups,
+      nodeId: this.state.nodeId,
     };
 
     console.log(`%c服务器预分组组件提交数据详情`, "color:#2f54eb");
