@@ -277,7 +277,12 @@ export default class SelectGroup extends React.Component {
     if (this.props.value) {
       if (this.props.value.extra_render) {
         const { dataSource, groups, apps, nodeId } = this.props.value.extra_render;
-        this.setState({ dataSource, groups, apps, nodeId });
+        this.setState({
+          nodeId: nodeId ? nodeId : 0,
+          dataSource: dataSource ? dataSource : {},
+          groups: groups ? groups : [],
+          apps: apps ? apps : [],
+        });
       } else if (this.props.value.dividing_group && !this.props.extra_render) {
         this.setState({
           dataSource: this.transportDataSource(this.props.value.dividing_group),
@@ -297,7 +302,12 @@ export default class SelectGroup extends React.Component {
     if (this.props.value) {
       if (nextProps.value.extra_render) {
         const { dataSource, groups, apps, nodeId } = nextProps.value.extra_render;
-        this.setState({ dataSource, groups, apps, nodeId });
+        this.setState({
+          nodeId: nodeId ? nodeId : 0,
+          dataSource: dataSource ? dataSource : {},
+          groups: groups ? groups : [],
+          apps: apps ? apps : [],
+        });
       } else if (nextProps.value.dividing_group && !nextProps.extra_render) {
         this.setState({
           dataSource: this.transportDataSource(nextProps.value.dividing_group),
@@ -370,6 +380,7 @@ export default class SelectGroup extends React.Component {
     const { haveModule = [], noModule = [] } = this.state.dataSource;
     const { hostCheckedKeys, groups, indeterminate, checkAll } = this.state;
     const { type, remark } = this.props;
+    console.log(haveModule, groups);
     const rightMouseMenu = (
       <Menu onClick={this.menuOnClick}>
         {

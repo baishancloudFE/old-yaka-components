@@ -589,7 +589,12 @@ var SelectGroup = function (_React$Component) {
               apps = _props$value$extra_re.apps,
               nodeId = _props$value$extra_re.nodeId;
 
-          this.setState({ dataSource: dataSource, groups: groups, apps: apps, nodeId: nodeId });
+          this.setState({
+            nodeId: nodeId ? nodeId : 0,
+            dataSource: dataSource ? dataSource : {},
+            groups: groups ? groups : [],
+            apps: apps ? apps : []
+          });
         } else if (this.props.value.dividing_group && !this.props.extra_render) {
           this.setState({
             dataSource: this.transportDataSource(this.props.value.dividing_group),
@@ -617,7 +622,12 @@ var SelectGroup = function (_React$Component) {
               apps = _nextProps$value$extr.apps,
               nodeId = _nextProps$value$extr.nodeId;
 
-          this.setState({ dataSource: dataSource, groups: groups, apps: apps, nodeId: nodeId });
+          this.setState({
+            nodeId: nodeId ? nodeId : 0,
+            dataSource: dataSource ? dataSource : {},
+            groups: groups ? groups : [],
+            apps: apps ? apps : []
+          });
         } else if (nextProps.value.dividing_group && !nextProps.extra_render) {
           this.setState({
             dataSource: this.transportDataSource(nextProps.value.dividing_group),
@@ -649,6 +659,7 @@ var SelectGroup = function (_React$Component) {
           type = _props.type,
           remark = _props.remark;
 
+      console.log(haveModule, groups);
       var rightMouseMenu = _react2.default.createElement(
         _menu2.default,
         { onClick: this.menuOnClick },
