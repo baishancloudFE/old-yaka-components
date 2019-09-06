@@ -56,6 +56,7 @@ const oldComponents = {
 }
 ```
 ## 目录结构
+```
 ├── README.md
 ├── dist  构建后的文件
 │   ├── components
@@ -125,7 +126,7 @@ const oldComponents = {
 │       └── index.js
 ├── package.json
 └── yarn.lock
-
+```
 ## 技术栈
 js + react + igroot
 ## 发布方式
