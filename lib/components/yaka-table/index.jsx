@@ -179,11 +179,16 @@ export class YakaTable extends Component {
     render() {
         this.mergeData()
         return (
-            <Table
-                {...this.props}
-                columns={this.columns}
-                dataSource={this.dataSource}
-            />
+            <div>
+                <span style={{ marginLeft: 8 }}>
+                    {this.dataSource.length > 0 ? `表格共 ${this.dataSource.length} 项` : ''}·
+                </span>
+                <Table
+                    {...this.props}
+                    columns={this.columns}
+                    dataSource={this.dataSource}
+                />
+            </div>
         )
     }
 }

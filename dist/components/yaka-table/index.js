@@ -421,10 +421,20 @@ var YakaTable = exports.YakaTable = function (_Component) {
         key: 'render',
         value: function render() {
             this.mergeData();
-            return _react2.default.createElement(_table2.default, _extends({}, this.props, {
-                columns: this.columns,
-                dataSource: this.dataSource
-            }));
+            return _react2.default.createElement(
+                'div',
+                null,
+                _react2.default.createElement(
+                    'span',
+                    { style: { marginLeft: 8 } },
+                    this.dataSource.length > 0 ? '\x1D\u8868\u683C\u5171 ' + this.dataSource.length + ' \u9879' : '',
+                    '\xB7'
+                ),
+                _react2.default.createElement(_table2.default, _extends({}, this.props, {
+                    columns: this.columns,
+                    dataSource: this.dataSource
+                }))
+            );
         }
     }]);
 
