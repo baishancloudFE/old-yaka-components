@@ -426,11 +426,13 @@ var YakaTable = exports.YakaTable = function (_Component) {
 			return _react2.default.createElement(_table2.default, _extends({}, this.props, {
 				columns: this.columns,
 				dataSource: this.dataSource,
-				pagination: {
+				pagination: this.props.pagination ? _extends({}, this.props.pagination, {
 					showTotal: function showTotal(total) {
 						return _this2.props.showTotal === false ? null : "\u5171 " + total + " \u6761";
 					}
-				}
+				}) : { showTotal: function showTotal(total) {
+						return _this2.props.showTotal === false ? null : "\u5171 " + total + " \u6761";
+					} }
 			}));
 		}
 	}]);
