@@ -181,9 +181,14 @@ export class YakaTable extends Component {
 				{...this.props}
 				columns={this.columns}
 				dataSource={this.dataSource}
-				pagination={{
-					showTotal: (total) => (this.props.showTotal === false ? null : `共 ${total} 条`)
-				}}
+				pagination={
+					this.props.pagination
+						? {
+								...this.props.pagination,
+								showTotal: (total) => (this.props.showTotal === false ? null : `共 ${total} 条`)
+						  }
+						: { showTotal: (total) => (this.props.showTotal === false ? null : `共 ${total} 条`) }
+				}
 			/>
 		);
 	}
