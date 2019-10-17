@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Table, Form, Upload, message, Button, Icon, Modal, Spin } from 'igroot'
+import { Table, Form, Upload, message, Button, Icon, Modal, Spin, Row, Col } from 'igroot'
 import { SortableContainer, SortableElement, arrayMove } from 'react-sortable-hoc'
 import XLSX from 'xlsx'
 import uuidv4 from 'uuid/v4'
@@ -72,7 +72,7 @@ export class YakaEditTable extends Component {
 						{getFieldDecorator(`${ele.name}[${index}].${col.name}`, {
 							initialValue: text ? text : null,
 							rules: col.rules ? col.rules : null
-						})(elementWalk([ col ], yakaApis)[0])}
+						})(elementWalk([col], yakaApis)[0])}
 					</FormItem>
 				)
 
@@ -131,7 +131,7 @@ export class YakaEditTable extends Component {
 			const val = this.props.form.getFieldValue(name)
 			dataSource.pop()
 			val.splice(index, 1)
-			this.setState({ dataSource: [ ...dataSource ] }, () => {
+			this.setState({ dataSource: [...dataSource] }, () => {
 				const obj = {}
 				obj[name] = val
 				this.props.form.setFieldsValue(obj)
@@ -141,23 +141,38 @@ export class YakaEditTable extends Component {
 
 	renderOpt = () => {
 		const { uploadExcel, exportExcel } = this.props
+		const { dataSource } = this.state
 
 		return (
-			<div className='igroot-editor-table-opt-area'>
-				{uploadExcel !== false && (
-					<div className='igroot-upload-excel'>
-						<Upload beforeUpload={this.beforeUpload}>
-							<Button>
-								<Icon type='upload' size='small' /> 导入excel
+			<div style={{marginBottom:'15px'}}>
+				<Row gutter={2}>
+					<Col span={18}>
+						{dataSource.length !== 0 && (
+							<span>
+								{dataSource.length > 0 ? `共 ${dataSource.length} 项` : ''}
+							</span>
+						)
+						}
+					</Col>
+					<Col span={3}>
+						{uploadExcel !== false && (
+							<div className='igroot-upload-excel'>
+								<Upload beforeUpload={this.beforeUpload}>
+									<Button>
+										<Icon type='upload' size='small' /> 导入excel
 							</Button>
-						</Upload>
-					</div>
-				)}
-				{exportExcel !== false && (
-					<Button onClick={this.handleExportXlsx} type='primary' style={{ float: 'right' }}>
-						导出excel
-					</Button>
-				)}
+								</Upload>
+							</div>
+						)}
+					</Col>
+					<Col span={3}>
+						{exportExcel !== false && (
+							<Button onClick={this.handleExportXlsx} type='primary' style={{ float: 'right' }}>
+								导出excel
+							</Button>
+						)}
+					</Col>
+				</Row>
 			</div>
 		)
 	}
@@ -381,7 +396,7 @@ export class YakaEditTable extends Component {
 			return buf
 		}
 		this.downFile(
-			new Blob([ s2ab(wbout) ], { type: 'application/octet-stream' }),
+			new Blob([s2ab(wbout)], { type: 'application/octet-stream' }),
 			name + '_' + new Date().toLocaleString() + '.' + 'xls'
 		)
 	}

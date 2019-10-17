@@ -17,6 +17,10 @@ var _spin = require('igroot/lib/spin');
 
 var _spin2 = _interopRequireDefault(_spin);
 
+var _row = require('igroot/lib/row');
+
+var _row2 = _interopRequireDefault(_row);
+
 var _upload = require('igroot/lib/upload');
 
 var _upload2 = _interopRequireDefault(_upload);
@@ -28,6 +32,10 @@ var _button2 = _interopRequireDefault(_button);
 var _icon = require('igroot/lib/icon');
 
 var _icon2 = _interopRequireDefault(_icon);
+
+var _col = require('igroot/lib/col');
+
+var _col2 = _interopRequireDefault(_col);
 
 var _message2 = require('igroot/lib/message');
 
@@ -47,11 +55,15 @@ require('igroot/lib/table/style');
 
 require('igroot/lib/spin/style');
 
+require('igroot/lib/row/style');
+
 require('igroot/lib/upload/style');
 
 require('igroot/lib/button/style');
 
 require('igroot/lib/icon/style');
+
+require('igroot/lib/col/style');
 
 require('igroot/lib/message/style');
 
@@ -257,29 +269,51 @@ var YakaEditTable = exports.YakaEditTable = function (_Component) {
 			var _this$props = _this.props,
 			    uploadExcel = _this$props.uploadExcel,
 			    exportExcel = _this$props.exportExcel;
+			var dataSource = _this.state.dataSource;
 
 
 			return _react2.default.createElement(
 				'div',
-				{ className: 'igroot-editor-table-opt-area' },
-				uploadExcel !== false && _react2.default.createElement(
-					'div',
-					{ className: 'igroot-upload-excel' },
+				{ style: { marginBottom: '15px' } },
+				_react2.default.createElement(
+					_row2.default,
+					{ gutter: 2 },
 					_react2.default.createElement(
-						_upload2.default,
-						{ beforeUpload: _this.beforeUpload },
-						_react2.default.createElement(
-							_button2.default,
+						_col2.default,
+						{ span: 18 },
+						dataSource.length !== 0 && _react2.default.createElement(
+							'span',
 							null,
-							_react2.default.createElement(_icon2.default, { type: 'upload', size: 'small' }),
-							' \u5BFC\u5165excel'
+							dataSource.length > 0 ? '\u5171 ' + dataSource.length + ' \u9879' : ''
+						)
+					),
+					_react2.default.createElement(
+						_col2.default,
+						{ span: 3 },
+						uploadExcel !== false && _react2.default.createElement(
+							'div',
+							{ className: 'igroot-upload-excel' },
+							_react2.default.createElement(
+								_upload2.default,
+								{ beforeUpload: _this.beforeUpload },
+								_react2.default.createElement(
+									_button2.default,
+									null,
+									_react2.default.createElement(_icon2.default, { type: 'upload', size: 'small' }),
+									' \u5BFC\u5165excel'
+								)
+							)
+						)
+					),
+					_react2.default.createElement(
+						_col2.default,
+						{ span: 3 },
+						exportExcel !== false && _react2.default.createElement(
+							_button2.default,
+							{ onClick: _this.handleExportXlsx, type: 'primary', style: { float: 'right' } },
+							'\u5BFC\u51FAexcel'
 						)
 					)
-				),
-				exportExcel !== false && _react2.default.createElement(
-					_button2.default,
-					{ onClick: _this.handleExportXlsx, type: 'primary', style: { float: 'right' } },
-					'\u5BFC\u51FAexcel'
 				)
 			);
 		}, _this.beforeUpload = function (file, fileList) {
