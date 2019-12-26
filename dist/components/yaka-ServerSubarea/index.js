@@ -28,6 +28,10 @@ var _menu = require("igroot/lib/menu");
 
 var _menu2 = _interopRequireDefault(_menu);
 
+var _alert = require("igroot/lib/alert");
+
+var _alert2 = _interopRequireDefault(_alert);
+
 var _icon = require("igroot/lib/icon");
 
 var _icon2 = _interopRequireDefault(_icon);
@@ -71,6 +75,8 @@ require("igroot/lib/checkbox/style");
 require("igroot/lib/dropdown/style");
 
 require("igroot/lib/menu/style");
+
+require("igroot/lib/alert/style");
 
 require("igroot/lib/icon/style");
 
@@ -375,17 +381,13 @@ var SelectGroup = function (_React$Component) {
           dataSource = _this$state3.dataSource,
           groups = _this$state3.groups,
           nodeId = _this$state3.nodeId;
-      var type = _this.props.type;
 
 
-      if (type === "cache") {
-        if (dataSource.haveModule.some(function (v) {
-          return !v.apps || v.apps.length === 0;
-        })) {
-          return _message3.default.warn("存在没有选择app的新建组");
-        }
+      if (dataSource.haveModule.some(function (v) {
+        return !v.apps || v.apps.length === 0;
+      })) {
+        return _message3.default.warn("存在没有选择app的新建组");
       }
-
       var params = {};
       params.node_id = nodeId;
       params.new_group = [];
@@ -477,7 +479,8 @@ var SelectGroup = function (_React$Component) {
                 app.name
               );
             })
-          ) },
+          )
+        },
         _react2.default.createElement(
           "span",
           { className: "action-text" },
@@ -535,6 +538,21 @@ var SelectGroup = function (_React$Component) {
       ), item.type === "new" && _react2.default.createElement(_icon2.default, { type: "close", className: "remove-icon", onClick: function onClick() {
           return _this.removeNewGroup(item.id);
         } })];
+    }, _this.warnTextRender = function () {
+      var dataSource = _this.state.dataSource;
+
+      dataSource.haveModule.some(function (v) {
+        return !v.apps || v.apps.length === 0;
+      });
+      if (data.haveModule) {
+        var haveNoSelectAppCard = dataSource.haveModule.some(function (v) {
+          return !v.apps || v.apps.length === 0;
+        });
+        if (haveNoSelectAppCard) {
+          return _react2.default.createElement(_alert2.default, { type: "error", message: "\u5B58\u5728\u6CA1\u6709\u9009\u62E9app\u7684\u5206\u7EC4\uFF01\u8BF7\u6CE8\u610F\uFF01" });
+        }
+      }
+      return null;
     }, _temp), _possibleConstructorReturn(_this, _ret);
   }
 
@@ -655,9 +673,7 @@ var SelectGroup = function (_React$Component) {
           groups = _state.groups,
           indeterminate = _state.indeterminate,
           checkAll = _state.checkAll;
-      var _props = this.props,
-          type = _props.type,
-          remark = _props.remark;
+      var remark = this.props.remark;
 
       console.log(haveModule, groups);
       var rightMouseMenu = _react2.default.createElement(
@@ -690,6 +706,7 @@ var SelectGroup = function (_React$Component) {
             remark
           )
         ),
+        this.warnTextRender(),
         _react2.default.createElement(
           _col2.default,
           { span: 24, style: { marginBottom: 10 } },
@@ -770,7 +787,7 @@ var SelectGroup = function (_React$Component) {
                 ),
                 className: "group-card",
                 key: "group-card-" + index,
-                extra: type === "cache" && _this4.oldGroupAppRender(item)
+                extra: _this4.oldGroupAppRender(item)
               },
               item.hosts && item.hosts.map(function (host, index) {
                 return _react2.default.createElement(
@@ -801,7 +818,7 @@ var SelectGroup = function (_React$Component) {
                   title: item.name,
                   className: "group-card",
                   key: "group-card-" + index,
-                  extra: type === "cache" && _this4.newGroupAppRender(item)
+                  extra: _this4.newGroupAppRender(item)
                 },
                 item.hosts.map(function (host, index) {
                   return _react2.default.createElement(
@@ -833,7 +850,7 @@ var SelectGroup = function (_React$Component) {
                   title: item.name,
                   className: "group-card",
                   key: "group-card-" + index,
-                  extra: type === "cache" && _this4.newGroupAppRender(item)
+                  extra: _this4.newGroupAppRender(item)
                 },
                 item.hosts.map(function (host, index) {
                   return _react2.default.createElement(
@@ -865,7 +882,6 @@ exports.default = SelectGroup;
 
 SelectGroup.defaultProps = {
   value: {},
-  type: "cache",
   remark: "",
   onChange: function onChange() {}
 };

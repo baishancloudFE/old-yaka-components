@@ -10,12 +10,14 @@ import {
   message,
   Divider,
   Popover,
-  Select, Icon, Tooltip
+  Select,
+  Icon,
+  Tooltip,
+  Alert
 } from "igroot";
 import "./index.css";
 
 export default class SelectGroup extends React.Component {
-
   state = {
     hostCheckedKeys: [],
     groups: [],
@@ -23,7 +25,7 @@ export default class SelectGroup extends React.Component {
     dataSource: {},
     appSelectKey: 0,
     indeterminate: false,
-    checkAll: false,
+    checkAll: false
   };
 
   // 增加新分组
@@ -34,7 +36,7 @@ export default class SelectGroup extends React.Component {
       name: `新增分组 - ${dataSource.haveModule.filter(v => v.type === "new").length + 1}`,
       type: "new",
       apps: [],
-      hosts: [],
+      hosts: []
     });
     this.setState({ dataSource }, () => {
       this.handleSubmit();
@@ -42,12 +44,12 @@ export default class SelectGroup extends React.Component {
   };
 
   // 原始组内多选框点击事件
-  ipsOnCheck = (checkedKeys) => {
+  ipsOnCheck = checkedKeys => {
     const { noModule } = this.state.dataSource;
     this.setState({
       hostCheckedKeys: checkedKeys,
       indeterminate: !!checkedKeys.length && checkedKeys.length < noModule.length,
-      checkAll: checkedKeys.length === noModule.length,
+      checkAll: checkedKeys.length === noModule.length
     });
   };
 
@@ -60,9 +62,9 @@ export default class SelectGroup extends React.Component {
 
     const noModule = JSON.parse(JSON.stringify(dataSource.noModule));
 
-    hostCheckedKeys.forEach((item) => {
+    hostCheckedKeys.forEach(item => {
       let group = dataSource.haveModule.find(v => v.id === Number(key));
-      const hostIndex = noModule.findIndex((v) => v === item);
+      const hostIndex = noModule.findIndex(v => v === item);
       if (group) {
         group.hosts.push(item);
       } else {
@@ -78,20 +80,23 @@ export default class SelectGroup extends React.Component {
 
     dataSource.noModule = noModule;
 
-    this.setState({
-      dataSource: dataSource,
-      hostCheckedKeys: [],
-      indeterminate: false,
-      checkAll: false,
-    }, () => {
-      this.handleSubmit();
-    });
+    this.setState(
+      {
+        dataSource: dataSource,
+        hostCheckedKeys: [],
+        indeterminate: false,
+        checkAll: false
+      },
+      () => {
+        this.handleSubmit();
+      }
+    );
   };
 
   // 分组内的标签移除
   removeTag = (groupId, hostName) => {
     const { dataSource } = this.state;
-    for(const group of dataSource.haveModule) {
+    for (const group of dataSource.haveModule) {
       if (group.id === groupId) {
         const hostIndex = group.hosts.findIndex(v => v === hostName);
         group.hosts.splice(hostIndex, 1);
@@ -108,10 +113,10 @@ export default class SelectGroup extends React.Component {
   choseAppSelect = (value, groupId) => {
     const { dataSource } = this.state;
 
-    for(const group of dataSource.haveModule) {
+    for (const group of dataSource.haveModule) {
       if (group.id === groupId) {
         group.apps = [];
-        value.forEach((item) => {
+        value.forEach(item => {
           group.apps.push({
             id: item.key,
             name: item.label
@@ -126,7 +131,7 @@ export default class SelectGroup extends React.Component {
   };
 
   // 移除新增的组
-  removeNewGroup = (groupId) => {
+  removeNewGroup = groupId => {
     const { dataSource } = this.state;
     let groupIndex = 0;
     const groupItem = dataSource.haveModule.find((v, index) => {
@@ -148,7 +153,7 @@ export default class SelectGroup extends React.Component {
   clearGroupHosts = (type, id) => {
     const { groups, dataSource } = this.state;
     if (type === "existing") {
-      for(const group of groups) {
+      for (const group of groups) {
         if (group.id === id && group.hosts && group.hosts.length !== 0) {
           dataSource.noModule.push(...group.hosts);
           group.hosts = [];
@@ -157,7 +162,7 @@ export default class SelectGroup extends React.Component {
       }
     }
 
-    for(const group of dataSource.haveModule) {
+    for (const group of dataSource.haveModule) {
       if (group.id === id && group.hosts && group.hosts.length !== 0) {
         dataSource.noModule.push(...group.hosts);
         group.hosts = [];
@@ -166,7 +171,6 @@ export default class SelectGroup extends React.Component {
         });
       }
     }
-
   };
 
   // 全选按钮点击事件
@@ -175,40 +179,36 @@ export default class SelectGroup extends React.Component {
     this.setState({
       hostCheckedKeys: e.target.checked ? noModule : [],
       indeterminate: false,
-      checkAll: e.target.checked,
+      checkAll: e.target.checked
     });
   };
 
   // 提交事件
   handleSubmit = () => {
     const { dataSource, groups, nodeId } = this.state;
-    const { type } = this.props;
 
-    if (type === "cache") {
-      if (dataSource.haveModule.some(v => !v.apps || v.apps.length === 0)) {
-        return message.warn("存在没有选择app的新建组");
-      }
+    if (dataSource.haveModule.some(v => !v.apps || v.apps.length === 0)) {
+      return message.warn("存在没有选择app的新建组");
     }
-
     const params = {};
     params.node_id = nodeId;
     params.new_group = [];
     params.old_group = {};
 
-    dataSource.haveModule.forEach((item) => {
+    dataSource.haveModule.forEach(item => {
       if (item.hosts && item.hosts.length !== 0) {
         const group = {
           apps: [],
-          hosts: [...item.hosts],
+          hosts: [...item.hosts]
         };
-        item.apps.forEach((app) => {
+        item.apps.forEach(app => {
           group.apps.push(app.id);
         });
         params.new_group.push(group);
       }
     });
 
-    groups.forEach((item) => {
+    groups.forEach(item => {
       if (item.hosts && item.hosts.length !== 0) {
         params.old_group[item.ename] = [...item.hosts];
       }
@@ -218,7 +218,7 @@ export default class SelectGroup extends React.Component {
       dataSource: dataSource,
       apps: this.state.apps,
       groups: this.state.groups,
-      nodeId: this.state.nodeId,
+      nodeId: this.state.nodeId
     };
 
     console.log(`%c服务器预分组组件提交数据详情`, "color:#2f54eb");
@@ -228,7 +228,7 @@ export default class SelectGroup extends React.Component {
   };
 
   // 数据流转换
-  transportDataSource = (data) => {
+  transportDataSource = data => {
     const haveModule = [];
     data.have_module.forEach((item, index) => {
       haveModule.push({
@@ -244,9 +244,9 @@ export default class SelectGroup extends React.Component {
   };
 
   // 原有分组数据流转换
-  transportGroup = (data) => {
+  transportGroup = data => {
     const groups = [];
-    data.forEach((item) => {
+    data.forEach(item => {
       groups.push({
         id: Number(item.id),
         name: item.name,
@@ -260,12 +260,12 @@ export default class SelectGroup extends React.Component {
   };
 
   // 固定app数据流转换
-  transportApp = (data) => {
+  transportApp = data => {
     const apps = [];
-    data.forEach((item) => {
+    data.forEach(item => {
       apps.push({
         id: Number(item.id),
-        name: item.name,
+        name: item.name
       });
     });
     return apps;
@@ -281,17 +281,20 @@ export default class SelectGroup extends React.Component {
           nodeId: nodeId ? nodeId : 0,
           dataSource: dataSource ? dataSource : {},
           groups: groups ? groups : [],
-          apps: apps ? apps : [],
+          apps: apps ? apps : []
         });
       } else if (this.props.value.dividing_group && !this.props.extra_render) {
-        this.setState({
-          dataSource: this.transportDataSource(this.props.value.dividing_group),
-          apps: this.transportApp(this.props.value.app_list),
-          groups: this.transportGroup(this.props.value.existing_group),
-          nodeId: this.props.value.node_id,
-        }, () => {
-          this.handleSubmit();
-        });
+        this.setState(
+          {
+            dataSource: this.transportDataSource(this.props.value.dividing_group),
+            apps: this.transportApp(this.props.value.app_list),
+            groups: this.transportGroup(this.props.value.existing_group),
+            nodeId: this.props.value.node_id
+          },
+          () => {
+            this.handleSubmit();
+          }
+        );
       }
     }
   }
@@ -306,41 +309,41 @@ export default class SelectGroup extends React.Component {
           nodeId: nodeId ? nodeId : 0,
           dataSource: dataSource ? dataSource : {},
           groups: groups ? groups : [],
-          apps: apps ? apps : [],
+          apps: apps ? apps : []
         });
       } else if (nextProps.value.dividing_group && !nextProps.extra_render) {
-        this.setState({
-          dataSource: this.transportDataSource(nextProps.value.dividing_group),
-          apps: this.transportApp(nextProps.value.app_list),
-          groups: this.transportGroup(nextProps.value.existing_group),
-          nodeId: nextProps.value.node_id,
-        }, () => {
-          this.handleSubmit();
-        });
+        this.setState(
+          {
+            dataSource: this.transportDataSource(nextProps.value.dividing_group),
+            apps: this.transportApp(nextProps.value.app_list),
+            groups: this.transportGroup(nextProps.value.existing_group),
+            nodeId: nextProps.value.node_id
+          },
+          () => {
+            this.handleSubmit();
+          }
+        );
       }
     }
   }
 
-  oldGroupAppRender = (item) => [
-    <span className="action-text" onClick={() => this.clearGroupHosts("existing", item.id)}>清空</span>,
+  oldGroupAppRender = item => [
+    <span className="action-text" onClick={() => this.clearGroupHosts("existing", item.id)}>
+      清空
+    </span>,
     <Divider type="vertical" />,
     <Popover
       overlayClassName="popover-style"
-      content={
-        <div>
-          {
-            item.apps && item.apps.map((app) => (
-              <p key={app.id}>{app.name}</p>
-            ))
-          }
-        </div>
-      }>
+      content={<div>{item.apps && item.apps.map(app => <p key={app.id}>{app.name}</p>)}</div>}
+    >
       <span className="action-text">app</span>
     </Popover>
   ];
 
-  newGroupAppRender = (item) => ([
-    <span className="action-text" onClick={() => this.clearGroupHosts(null, item.id)}>清空</span>,
+  newGroupAppRender = item => [
+    <span className="action-text" onClick={() => this.clearGroupHosts(null, item.id)}>
+      清空
+    </span>,
     <Divider type="vertical" />,
     <Popover
       trigger="click"
@@ -356,15 +359,13 @@ export default class SelectGroup extends React.Component {
               defaultValue={item.apps.map(v => {
                 return { label: v.name, key: v.id };
               })}
-              onChange={(value) => this.choseAppSelect(value, item.id)}
+              onChange={value => this.choseAppSelect(value, item.id)}
             >
-              {
-                this.state.apps.map((app) => (
-                  <Select.Option value={app.id} key={app.id}>
-                    {app.name}
-                  </Select.Option>
-                ))
-              }
+              {this.state.apps.map(app => (
+                <Select.Option value={app.id} key={app.id}>
+                  {app.name}
+                </Select.Option>
+              ))}
             </Select>
           </Col>
         </Row>
@@ -372,52 +373,56 @@ export default class SelectGroup extends React.Component {
     >
       <span className="action-text">修改app</span>
     </Popover>,
-    item.type === "new" && <Icon type="close" className="remove-icon" onClick={() => this.removeNewGroup(item.id)} />
-  ]);
+    item.type === "new" && (
+      <Icon type="close" className="remove-icon" onClick={() => this.removeNewGroup(item.id)} />
+    )
+  ];
+
+  warnTextRender = () => {
+    const { dataSource } = this.state;
+    dataSource.haveModule.some(v => !v.apps || v.apps.length === 0);
+    if (data.haveModule) {
+      const haveNoSelectAppCard = dataSource.haveModule.some(v => !v.apps || v.apps.length === 0);
+      if (haveNoSelectAppCard) {
+        return <Alert type="error" message="存在没有选择app的分组！请注意！" />;
+      }
+    }
+    return null;
+  };
 
   render() {
-
     const { haveModule = [], noModule = [] } = this.state.dataSource;
     const { hostCheckedKeys, groups, indeterminate, checkAll } = this.state;
-    const { type, remark } = this.props;
+    const { remark } = this.props;
     console.log(haveModule, groups);
     const rightMouseMenu = (
       <Menu onClick={this.menuOnClick}>
-        {
-          haveModule.map((item) => (
-            <Menu.Item key={item.id}>
-              {item.name}
-            </Menu.Item>
-          ))
-        }
-        {
-          groups.map((item) => (
-            <Menu.Item key={item.id}>
-              {item.name}
-            </Menu.Item>
-          ))
-        }
+        {haveModule.map(item => (
+          <Menu.Item key={item.id}>{item.name}</Menu.Item>
+        ))}
+        {groups.map(item => (
+          <Menu.Item key={item.id}>{item.name}</Menu.Item>
+        ))}
       </Menu>
     );
     return [
       <Row gutter={15} className="select-group">
         <Col span={24}>
-          <pre className="remark-pre">
-            {remark}
-          </pre>
+          <pre className="remark-pre">{remark}</pre>
         </Col>
+        {this.warnTextRender()}
         <Col span={24} style={{ marginBottom: 10 }}>
           <Card
-            title='服务器列表'
-            extra={
-              [
-                <Dropdown overlay={rightMouseMenu} trigger={["click"]}>
-                  <span className="action-text">移动</span>
-                </Dropdown>,
-                <Divider type="vertical" />,
-                <span className="action-text" onClick={this.insertGroup.bind(this)}>新增分组</span>,
-              ]
-            }
+            title="服务器列表"
+            extra={[
+              <Dropdown overlay={rightMouseMenu} trigger={["click"]}>
+                <span className="action-text">移动</span>
+              </Dropdown>,
+              <Divider type="vertical" />,
+              <span className="action-text" onClick={this.insertGroup.bind(this)}>
+                新增分组
+              </span>
+            ]}
           >
             <div
               style={{
@@ -440,32 +445,26 @@ export default class SelectGroup extends React.Component {
               onChange={this.ipsOnCheck.bind(this)}
             >
               <Row>
-                {
-                  noModule.map((item, index) => (
-                    <Col span={6} key={index}>
-                      <Checkbox value={item}>{item}</Checkbox>
-                    </Col>
-                  ))
-                }
+                {noModule.map((item, index) => (
+                  <Col span={6} key={index}>
+                    <Checkbox value={item}>{item}</Checkbox>
+                  </Col>
+                ))}
               </Row>
             </Checkbox.Group>
           </Card>
         </Col>
         <Col span={8}>
-          {
-            groups.map((item, index) => (
-              <Card
-                size='small'
-                title={
-                  <Tooltip title={item.name}>
-                    {item.name}
-                  </Tooltip>
-                }
-                className="group-card"
-                key={`group-card-${index}`}
-                extra={type === "cache" && this.oldGroupAppRender(item)}
-              >
-                {item.hosts && item.hosts.map((host, index) => (
+          {groups.map((item, index) => (
+            <Card
+              size="small"
+              title={<Tooltip title={item.name}>{item.name}</Tooltip>}
+              className="group-card"
+              key={`group-card-${index}`}
+              extra={this.oldGroupAppRender(item)}
+            >
+              {item.hosts &&
+                item.hosts.map((host, index) => (
                   <Tag
                     className="group-tag"
                     key={`${item.name}-${host}-${index}`}
@@ -475,65 +474,60 @@ export default class SelectGroup extends React.Component {
                     {host}
                   </Tag>
                 ))}
-              </Card>
-            ))
-          }
+            </Card>
+          ))}
         </Col>
         <Col span={8}>
-          {
-            haveModule.map((item, index) => {
-              if (item.type === "advance") {
-                return (
-                  <Card
-                    size='small'
-                    title={item.name}
-                    className="group-card"
-                    key={`group-card-${index}`}
-                    extra={type === "cache" && this.newGroupAppRender(item)}
-                  >
-                    {item.hosts.map((host, index) => (
-                      <Tag
-                        className="group-tag"
-                        key={`${item.name}-${host}-${index}`}
-                        closable={true}
-                        onClose={() => this.removeTag(item.id, host)}
-                      >
-                        {host}
-                      </Tag>
-                    ))}
-                  </Card>
-                );
-              }
-            })
-          }
+          {haveModule.map((item, index) => {
+            if (item.type === "advance") {
+              return (
+                <Card
+                  size="small"
+                  title={item.name}
+                  className="group-card"
+                  key={`group-card-${index}`}
+                  extra={this.newGroupAppRender(item)}
+                >
+                  {item.hosts.map((host, index) => (
+                    <Tag
+                      className="group-tag"
+                      key={`${item.name}-${host}-${index}`}
+                      closable={true}
+                      onClose={() => this.removeTag(item.id, host)}
+                    >
+                      {host}
+                    </Tag>
+                  ))}
+                </Card>
+              );
+            }
+          })}
         </Col>
         <Col span={8}>
-          {
-            haveModule.map((item, index) => {
-              if (item.type === "new") {
-                return (
-                  <Card
-                    size='small'
-                    title={item.name}
-                    className="group-card"
-                    key={`group-card-${index}`}
-                    extra={type === "cache" && this.newGroupAppRender(item)}
-                  >
-                    {item.hosts.map((host, index) => (
-                      <Tag
-                        className="group-tag"
-                        key={`${item.name}-${host}-${index}`}
-                        closable={true}
-                        onClose={() => this.removeTag(item.id, host)}
-                      >
-                        {host}
-                      </Tag>
-                    ))}
-                  </Card>
-                );
-              }
-            })
-          }
+          {haveModule.map((item, index) => {
+            if (item.type === "new") {
+              return (
+                <Card
+                  size="small"
+                  title={item.name}
+                  className="group-card"
+                  key={`group-card-${index}`}
+                  extra={this.newGroupAppRender(item)}
+                >
+                  {item.hosts.map((host, index) => (
+                    <Tag
+                      className="group-tag"
+                      key={`${item.name}-${host}-${index}`}
+                      closable={true}
+                      onClose={() => this.removeTag(item.id, host)}
+                    >
+                      {host}
+                    </Tag>
+                  ))}
+                </Card>
+              );
+            }
+          })}
         </Col>
       </Row>
     ];
@@ -542,8 +536,6 @@ export default class SelectGroup extends React.Component {
 
 SelectGroup.defaultProps = {
   value: {},
-  type: "cache",
   remark: "",
-  onChange: () => {
-  },
+  onChange: () => {}
 };
