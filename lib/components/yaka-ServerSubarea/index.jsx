@@ -96,12 +96,18 @@ export default class SelectGroup extends React.Component {
   // 分组内的标签移除
   removeTag = (groupId, hostName) => {
     const { dataSource } = this.state;
+    if (!dataSource.haveModule) {
+      dataSource.haveModule = [];
+    }
     for (const group of dataSource.haveModule) {
       if (group.id === groupId) {
         const hostIndex = group.hosts.findIndex(v => v === hostName);
         group.hosts.splice(hostIndex, 1);
         break;
       }
+    }
+    if (!dataSource.noModule) {
+      dataSource.noModule = [];
     }
     dataSource.noModule.push(hostName);
     this.setState({ dataSource, hostCheckedKeys: [] }, () => {
@@ -160,6 +166,13 @@ export default class SelectGroup extends React.Component {
           return this.setState({ groups: groups, dataSource });
         }
       }
+    }
+
+    if (!dataSource.noModule) {
+      dataSource.noModule = [];
+    }
+    if (!dataSource.haveModule) {
+      dataSource.haveModule = [];
     }
 
     for (const group of dataSource.haveModule) {
@@ -272,6 +285,7 @@ export default class SelectGroup extends React.Component {
   };
 
   componentDidMount() {
+    console.log(this.porps);
     console.log("%cDidMount", "color:#1890FF");
     console.log(`%c${JSON.stringify(this.props.value)}`, "color:#F5222D");
     if (this.props.value) {
@@ -356,9 +370,13 @@ export default class SelectGroup extends React.Component {
               showSearch={true}
               allowClear={true}
               labelInValue={true}
-              defaultValue={item.apps.map(v => {
-                return { label: v.name, key: v.id };
-              })}
+              defaultValue={
+                item.apps
+                  ? item.apps.map(v => {
+                      return { label: v.name, key: v.id };
+                    })
+                  : []
+              }
               onChange={value => this.choseAppSelect(value, item.id)}
             >
               {this.state.apps.map(app => (
@@ -380,8 +398,7 @@ export default class SelectGroup extends React.Component {
 
   warnTextRender = () => {
     const { dataSource } = this.state;
-    dataSource.haveModule.some(v => !v.apps || v.apps.length === 0);
-    if (data.haveModule) {
+    if (dataSource.haveModule) {
       const haveNoSelectAppCard = dataSource.haveModule.some(v => !v.apps || v.apps.length === 0);
       if (haveNoSelectAppCard) {
         return <Alert type="error" message="存在没有选择app的分组！请注意！" />;
@@ -394,7 +411,7 @@ export default class SelectGroup extends React.Component {
     const { haveModule = [], noModule = [] } = this.state.dataSource;
     const { hostCheckedKeys, groups, indeterminate, checkAll } = this.state;
     const { remark } = this.props;
-    console.log(haveModule, groups);
+
     const rightMouseMenu = (
       <Menu onClick={this.menuOnClick}>
         {haveModule.map(item => (
@@ -405,12 +422,13 @@ export default class SelectGroup extends React.Component {
         ))}
       </Menu>
     );
+
     return [
       <Row gutter={15} className="select-group">
         <Col span={24}>
           <pre className="remark-pre">{remark}</pre>
         </Col>
-        {this.warnTextRender()}
+        <Col span={24}>{this.warnTextRender()}</Col>
         <Col span={24} style={{ marginBottom: 10 }}>
           <Card
             title="服务器列表"
@@ -536,6 +554,6 @@ export default class SelectGroup extends React.Component {
 
 SelectGroup.defaultProps = {
   value: {},
-  remark: "",
+  remark: "asdasdasd",
   onChange: () => {}
 };

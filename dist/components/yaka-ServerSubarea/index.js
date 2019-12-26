@@ -200,6 +200,10 @@ var SelectGroup = function (_React$Component) {
       });
     }, _this.removeTag = function (groupId, hostName) {
       var dataSource = _this.state.dataSource;
+
+      if (!dataSource.haveModule) {
+        dataSource.haveModule = [];
+      }
       var _iteratorNormalCompletion = true;
       var _didIteratorError = false;
       var _iteratorError = undefined;
@@ -231,6 +235,9 @@ var SelectGroup = function (_React$Component) {
         }
       }
 
+      if (!dataSource.noModule) {
+        dataSource.noModule = [];
+      }
       dataSource.noModule.push(hostName);
       _this.setState({ dataSource: dataSource, hostCheckedKeys: [] }, function () {
         _this.handleSubmit();
@@ -334,6 +341,13 @@ var SelectGroup = function (_React$Component) {
             }
           }
         }
+      }
+
+      if (!dataSource.noModule) {
+        dataSource.noModule = [];
+      }
+      if (!dataSource.haveModule) {
+        dataSource.haveModule = [];
       }
 
       var _iteratorNormalCompletion4 = true;
@@ -512,9 +526,9 @@ var SelectGroup = function (_React$Component) {
                   showSearch: true,
                   allowClear: true,
                   labelInValue: true,
-                  defaultValue: item.apps.map(function (v) {
+                  defaultValue: item.apps ? item.apps.map(function (v) {
                     return { label: v.name, key: v.id };
-                  }),
+                  }) : [],
                   onChange: function onChange(value) {
                     return _this.choseAppSelect(value, item.id);
                   }
@@ -541,10 +555,7 @@ var SelectGroup = function (_React$Component) {
     }, _this.warnTextRender = function () {
       var dataSource = _this.state.dataSource;
 
-      dataSource.haveModule.some(function (v) {
-        return !v.apps || v.apps.length === 0;
-      });
-      if (data.haveModule) {
+      if (dataSource.haveModule) {
         var haveNoSelectAppCard = dataSource.haveModule.some(function (v) {
           return !v.apps || v.apps.length === 0;
         });
@@ -597,6 +608,7 @@ var SelectGroup = function (_React$Component) {
     value: function componentDidMount() {
       var _this2 = this;
 
+      console.log(this.porps);
       console.log("%cDidMount", "color:#1890FF");
       console.log("%c" + JSON.stringify(this.props.value), "color:#F5222D");
       if (this.props.value) {
@@ -675,7 +687,7 @@ var SelectGroup = function (_React$Component) {
           checkAll = _state.checkAll;
       var remark = this.props.remark;
 
-      console.log(haveModule, groups);
+
       var rightMouseMenu = _react2.default.createElement(
         _menu2.default,
         { onClick: this.menuOnClick },
@@ -694,6 +706,7 @@ var SelectGroup = function (_React$Component) {
           );
         })
       );
+
       return [_react2.default.createElement(
         _row2.default,
         { gutter: 15, className: "select-group" },
@@ -706,7 +719,11 @@ var SelectGroup = function (_React$Component) {
             remark
           )
         ),
-        this.warnTextRender(),
+        _react2.default.createElement(
+          _col2.default,
+          { span: 24 },
+          this.warnTextRender()
+        ),
         _react2.default.createElement(
           _col2.default,
           { span: 24, style: { marginBottom: 10 } },
@@ -882,6 +899,6 @@ exports.default = SelectGroup;
 
 SelectGroup.defaultProps = {
   value: {},
-  remark: "",
+  remark: "asdasdasd",
   onChange: function onChange() {}
 };
