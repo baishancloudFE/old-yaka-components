@@ -7,8 +7,8 @@ class IpInput extends React.Component {
   state = {
     validate: {
       success: true,
-      msg: '检测通过',
-    },
+      msg: '检测通过'
+    }
   };
 
   handleNumberChange = e => {
@@ -16,16 +16,16 @@ class IpInput extends React.Component {
 
     let { value } = e.target;
 
+    value = value.replace(/[^a-z0-9.:]/g, '').replace(/\s+/g, '');
     if (!value) {
       this.props.onChange(value);
       return this.setState({
-        validate: { success: true, msg: '检测通过' },
+        validate: { success: true, msg: '检测通过' }
       });
     }
 
-    value = value.replace(/[^a-z0-9. :]/g, '');
     this.setState({
-      validate: { success: false, msg: '正在检测' },
+      validate: { success: false, msg: '正在检测' }
     });
 
     timer = setTimeout(() => {
@@ -47,7 +47,7 @@ class IpInput extends React.Component {
     if (type === 'ipv4') {
       if (!isIPv4) {
         return this.setState({
-          validate: { success: false, msg: '没有通过IPv4检测' },
+          validate: { success: false, msg: '没有通过IPv4检测' }
         });
       }
     }
@@ -55,18 +55,18 @@ class IpInput extends React.Component {
     if (type === 'ipv6') {
       if (!isIPv6) {
         return this.setState({
-          validate: { success: false, msg: '没有通过IPv6检测' },
+          validate: { success: false, msg: '没有通过IPv6检测' }
         });
       }
     }
 
     if (isIPv4 || isIPv6) {
       return this.setState({
-        validate: { success: true, msg: '检测通过' },
+        validate: { success: true, msg: '检测通过' }
       });
     } else {
       return this.setState({
-        validate: { success: false, msg: '没有通过IPv4或IPv6检测' },
+        validate: { success: false, msg: '没有通过IPv4或IPv6检测' }
       });
     }
   }
