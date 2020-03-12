@@ -57,6 +57,7 @@ var IpInput = function (_React$Component) {
       var value = e.target.value;
 
 
+      value = value.replace(/[^a-z0-9.:]/g, '').replace(/\s+/g, '');
       if (!value) {
         _this.props.onChange(value);
         return _this.setState({
@@ -64,7 +65,6 @@ var IpInput = function (_React$Component) {
         });
       }
 
-      value = value.replace(/[^a-z0-9. :]/g, '');
       _this.setState({
         validate: { success: false, msg: '正在检测' }
       });
