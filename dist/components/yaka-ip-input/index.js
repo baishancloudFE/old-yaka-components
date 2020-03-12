@@ -58,6 +58,7 @@ var IpInput = function (_React$Component) {
 
 
       if (!value) {
+        _this.props.onChange(value);
         return _this.setState({
           validate: { success: true, msg: '检测通过' }
         });
@@ -79,7 +80,6 @@ var IpInput = function (_React$Component) {
   _createClass(IpInput, [{
     key: 'validate',
     value: function validate(value) {
-      console.log('开始运行检测');
       clearTimeout(timer);
       var _props$type = this.props.type,
           type = _props$type === undefined ? 'ipv4' : _props$type;
@@ -87,15 +87,10 @@ var IpInput = function (_React$Component) {
       var ipv4Reg = /^((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$/;
       var ipv6Reg = /^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*$/;
 
-      if (type === 'ipv6') {
-        var isIPv6 = ipv6Reg.test(value);
-        if (!isIPv6) {
-          return this.setState({
-            validate: { success: false, msg: '没有通过IPv6检测' }
-          });
-        }
-      } else {
-        var isIPv4 = ipv4Reg.test(value);
+      var isIPv4 = ipv4Reg.test(value);
+      var isIPv6 = ipv6Reg.test(value);
+
+      if (type === 'ipv4') {
         if (!isIPv4) {
           return this.setState({
             validate: { success: false, msg: '没有通过IPv4检测' }
@@ -103,9 +98,23 @@ var IpInput = function (_React$Component) {
         }
       }
 
-      this.setState({
-        validate: { success: true, msg: '检测通过' }
-      });
+      if (type === 'ipv6') {
+        if (!isIPv6) {
+          return this.setState({
+            validate: { success: false, msg: '没有通过IPv6检测' }
+          });
+        }
+      }
+
+      if (isIPv4 || isIPv6) {
+        return this.setState({
+          validate: { success: true, msg: '检测通过' }
+        });
+      } else {
+        return this.setState({
+          validate: { success: false, msg: '没有通过IPv4或IPv6检测' }
+        });
+      }
     }
   }, {
     key: 'componentWillUnmount',
