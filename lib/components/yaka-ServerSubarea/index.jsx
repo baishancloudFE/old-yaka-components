@@ -66,7 +66,11 @@ export default class SelectGroup extends React.Component {
       let group = dataSource.haveModule.find(v => v.id === Number(key))
       const hostIndex = noModule.findIndex(v => v === item)
       if (group) {
-        group.hosts.push(item)
+        if (!Array.isArray(group.hosts)) {
+          group.hosts = [item]
+        } else {
+          group.hosts.push(item)
+        }
       } else {
         group = groups.find(v => v.id === Number(key))
         if (group.hosts) {

@@ -176,7 +176,11 @@ var SelectGroup = function (_React$Component) {
           return v === item;
         });
         if (group) {
-          group.hosts.push(item);
+          if (!Array.isArray(group.hosts)) {
+            group.hosts = [item];
+          } else {
+            group.hosts.push(item);
+          }
         } else {
           group = groups.find(function (v) {
             return v.id === Number(key);
