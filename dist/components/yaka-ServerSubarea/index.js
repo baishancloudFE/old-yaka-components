@@ -1,62 +1,62 @@
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _tag = require("igroot/lib/tag");
+var _tag = require('igroot/lib/tag');
 
 var _tag2 = _interopRequireDefault(_tag);
 
-var _tooltip = require("igroot/lib/tooltip");
+var _tooltip = require('igroot/lib/tooltip');
 
 var _tooltip2 = _interopRequireDefault(_tooltip);
 
-var _card = require("igroot/lib/card");
+var _card = require('igroot/lib/card');
 
 var _card2 = _interopRequireDefault(_card);
 
-var _checkbox = require("igroot/lib/checkbox");
+var _checkbox = require('igroot/lib/checkbox');
 
 var _checkbox2 = _interopRequireDefault(_checkbox);
 
-var _dropdown = require("igroot/lib/dropdown");
+var _dropdown = require('igroot/lib/dropdown');
 
 var _dropdown2 = _interopRequireDefault(_dropdown);
 
-var _menu = require("igroot/lib/menu");
+var _menu = require('igroot/lib/menu');
 
 var _menu2 = _interopRequireDefault(_menu);
 
-var _alert = require("igroot/lib/alert");
+var _alert = require('igroot/lib/alert');
 
 var _alert2 = _interopRequireDefault(_alert);
 
-var _icon = require("igroot/lib/icon");
+var _icon = require('igroot/lib/icon');
 
 var _icon2 = _interopRequireDefault(_icon);
 
-var _row = require("igroot/lib/row");
+var _row = require('igroot/lib/row');
 
 var _row2 = _interopRequireDefault(_row);
 
-var _col = require("igroot/lib/col");
+var _col = require('igroot/lib/col');
 
 var _col2 = _interopRequireDefault(_col);
 
-var _select = require("igroot/lib/select");
+var _select = require('igroot/lib/select');
 
 var _select2 = _interopRequireDefault(_select);
 
-var _popover = require("igroot/lib/popover");
+var _popover = require('igroot/lib/popover');
 
 var _popover2 = _interopRequireDefault(_popover);
 
-var _divider = require("igroot/lib/divider");
+var _divider = require('igroot/lib/divider');
 
 var _divider2 = _interopRequireDefault(_divider);
 
-var _message2 = require("igroot/lib/message");
+var _message2 = require('igroot/lib/message');
 
 var _message3 = _interopRequireDefault(_message2);
 
@@ -64,39 +64,39 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-require("igroot/lib/tag/style");
+require('igroot/lib/tag/style');
 
-require("igroot/lib/tooltip/style");
+require('igroot/lib/tooltip/style');
 
-require("igroot/lib/card/style");
+require('igroot/lib/card/style');
 
-require("igroot/lib/checkbox/style");
+require('igroot/lib/checkbox/style');
 
-require("igroot/lib/dropdown/style");
+require('igroot/lib/dropdown/style');
 
-require("igroot/lib/menu/style");
+require('igroot/lib/menu/style');
 
-require("igroot/lib/alert/style");
+require('igroot/lib/alert/style');
 
-require("igroot/lib/icon/style");
+require('igroot/lib/icon/style');
 
-require("igroot/lib/row/style");
+require('igroot/lib/row/style');
 
-require("igroot/lib/col/style");
+require('igroot/lib/col/style');
 
-require("igroot/lib/select/style");
+require('igroot/lib/select/style');
 
-require("igroot/lib/popover/style");
+require('igroot/lib/popover/style');
 
-require("igroot/lib/divider/style");
+require('igroot/lib/divider/style');
 
-require("igroot/lib/message/style");
+require('igroot/lib/message/style');
 
-var _react = require("react");
+var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-require("./index.css");
+require('./index.css');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -130,15 +130,17 @@ var SelectGroup = function (_React$Component) {
       appSelectKey: 0,
       indeterminate: false,
       checkAll: false
+
+      // 增加新分组
     }, _this.insertGroup = function () {
       var dataSource = _this.state.dataSource;
 
       dataSource.haveModule.push({
         id: dataSource.haveModule.length + 1,
-        name: "\u65B0\u589E\u5206\u7EC4 - " + (dataSource.haveModule.filter(function (v) {
-          return v.type === "new";
+        name: '\u65B0\u589E\u5206\u7EC4 - ' + (dataSource.haveModule.filter(function (v) {
+          return v.type === 'new';
         }).length + 1),
-        type: "new",
+        type: 'new',
         apps: [],
         hosts: []
       });
@@ -161,7 +163,7 @@ var SelectGroup = function (_React$Component) {
           groups = _this$state.groups;
 
       if (!hostCheckedKeys || hostCheckedKeys.length === 0) {
-        return _message3.default.error("没有选择任何节点");
+        return _message3.default.error('没有选择任何节点');
       }
 
       var noModule = JSON.parse(JSON.stringify(dataSource.noModule));
@@ -260,7 +262,7 @@ var SelectGroup = function (_React$Component) {
                 name: item.label
               });
             });
-            _message3.default.success("添加app成功");
+            _message3.default.success('添加app成功');
             return {
               v: _this.setState({ dataSource: dataSource }, function () {
                 _this.handleSubmit();
@@ -272,7 +274,7 @@ var SelectGroup = function (_React$Component) {
         for (var _iterator2 = dataSource.haveModule[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
           var _ret2 = _loop();
 
-          if ((typeof _ret2 === "undefined" ? "undefined" : _typeof(_ret2)) === "object") return _ret2.v;
+          if ((typeof _ret2 === 'undefined' ? 'undefined' : _typeof(_ret2)) === "object") return _ret2.v;
         }
       } catch (err) {
         _didIteratorError2 = true;
@@ -310,7 +312,7 @@ var SelectGroup = function (_React$Component) {
           groups = _this$state2.groups,
           dataSource = _this$state2.dataSource;
 
-      if (type === "existing") {
+      if (type === 'existing') {
         var _iteratorNormalCompletion3 = true;
         var _didIteratorError3 = false;
         var _iteratorError3 = undefined;
@@ -400,7 +402,7 @@ var SelectGroup = function (_React$Component) {
       if (dataSource.haveModule.some(function (v) {
         return !v.apps || v.apps.length === 0;
       })) {
-        return _message3.default.warn("存在没有选择app的新建组");
+        return _message3.default.warn('存在没有选择app的新建组');
       }
       var params = {};
       params.node_id = nodeId;
@@ -433,7 +435,7 @@ var SelectGroup = function (_React$Component) {
         nodeId: _this.state.nodeId
       };
 
-      console.log("%c\u670D\u52A1\u5668\u9884\u5206\u7EC4\u7EC4\u4EF6\u63D0\u4EA4\u6570\u636E\u8BE6\u60C5", "color:#2f54eb");
+      console.log('%c\u670D\u52A1\u5668\u9884\u5206\u7EC4\u7EC4\u4EF6\u63D0\u4EA4\u6570\u636E\u8BE6\u60C5', 'color:#2f54eb');
       console.log(params);
 
       _this.props.onChange(params);
@@ -442,10 +444,10 @@ var SelectGroup = function (_React$Component) {
       data.have_module.forEach(function (item, index) {
         haveModule.push({
           id: index + 1,
-          name: "\u9884\u5206\u7EC4 - " + (index + 1),
+          name: '\u9884\u5206\u7EC4 - ' + (index + 1),
           apps: item.apps,
-          hosts: item.hosts,
-          type: "advance"
+          hosts: item.hosts || [],
+          type: 'advance'
         });
       });
       var noModule = data.no_module;
@@ -459,7 +461,7 @@ var SelectGroup = function (_React$Component) {
           ename: item.ename,
           hosts: item.hosts ? item.hosts : [],
           apps: item.apps ? item.apps : [],
-          existing: "existing"
+          existing: 'existing'
         });
       });
       return groups;
@@ -474,21 +476,21 @@ var SelectGroup = function (_React$Component) {
       return apps;
     }, _this.oldGroupAppRender = function (item) {
       return [_react2.default.createElement(
-        "span",
-        { className: "action-text", onClick: function onClick() {
-            return _this.clearGroupHosts("existing", item.id);
+        'span',
+        { className: 'action-text', onClick: function onClick() {
+            return _this.clearGroupHosts('existing', item.id);
           } },
-        "\u6E05\u7A7A"
-      ), _react2.default.createElement(_divider2.default, { type: "vertical" }), _react2.default.createElement(
+        '\u6E05\u7A7A'
+      ), _react2.default.createElement(_divider2.default, { type: 'vertical' }), _react2.default.createElement(
         _popover2.default,
         {
-          overlayClassName: "popover-style",
+          overlayClassName: 'popover-style',
           content: _react2.default.createElement(
-            "div",
+            'div',
             null,
             item.apps && item.apps.map(function (app) {
               return _react2.default.createElement(
-                "p",
+                'p',
                 { key: app.id },
                 app.name
               );
@@ -496,22 +498,22 @@ var SelectGroup = function (_React$Component) {
           )
         },
         _react2.default.createElement(
-          "span",
-          { className: "action-text" },
-          "app"
+          'span',
+          { className: 'action-text' },
+          'app'
         )
       )];
     }, _this.newGroupAppRender = function (item) {
       return [_react2.default.createElement(
-        "span",
-        { className: "action-text", onClick: function onClick() {
+        'span',
+        { className: 'action-text', onClick: function onClick() {
             return _this.clearGroupHosts(null, item.id);
           } },
-        "\u6E05\u7A7A"
-      ), _react2.default.createElement(_divider2.default, { type: "vertical" }), _react2.default.createElement(
+        '\u6E05\u7A7A'
+      ), _react2.default.createElement(_divider2.default, { type: 'vertical' }), _react2.default.createElement(
         _popover2.default,
         {
-          trigger: "click",
+          trigger: 'click',
           content: _react2.default.createElement(
             _row2.default,
             { style: { width: 150 } },
@@ -521,8 +523,8 @@ var SelectGroup = function (_React$Component) {
               _react2.default.createElement(
                 _select2.default,
                 {
-                  mode: "multiple",
-                  style: { width: "100%", marginBottom: 10 },
+                  mode: 'multiple',
+                  style: { width: '100%', marginBottom: 10 },
                   showSearch: true,
                   allowClear: true,
                   labelInValue: true,
@@ -545,11 +547,11 @@ var SelectGroup = function (_React$Component) {
           )
         },
         _react2.default.createElement(
-          "span",
-          { className: "action-text" },
-          "\u4FEE\u6539app"
+          'span',
+          { className: 'action-text' },
+          '\u4FEE\u6539app'
         )
-      ), item.type === "new" && _react2.default.createElement(_icon2.default, { type: "close", className: "remove-icon", onClick: function onClick() {
+      ), item.type === 'new' && _react2.default.createElement(_icon2.default, { type: 'close', className: 'remove-icon', onClick: function onClick() {
           return _this.removeNewGroup(item.id);
         } })];
     }, _this.warnTextRender = function () {
@@ -560,15 +562,12 @@ var SelectGroup = function (_React$Component) {
           return !v.apps || v.apps.length === 0;
         });
         if (haveNoSelectAppCard) {
-          return _react2.default.createElement(_alert2.default, { type: "error", message: "\u5B58\u5728\u6CA1\u6709\u9009\u62E9app\u7684\u5206\u7EC4\uFF01\u8BF7\u6CE8\u610F\uFF01" });
+          return _react2.default.createElement(_alert2.default, { type: 'error', message: '\u5B58\u5728\u6CA1\u6709\u9009\u62E9app\u7684\u5206\u7EC4\uFF01\u8BF7\u6CE8\u610F\uFF01' });
         }
       }
       return null;
     }, _temp), _possibleConstructorReturn(_this, _ret);
   }
-
-  // 增加新分组
-
 
   // 原始组内多选框点击事件
 
@@ -604,13 +603,13 @@ var SelectGroup = function (_React$Component) {
 
 
   _createClass(SelectGroup, [{
-    key: "componentDidMount",
+    key: 'componentDidMount',
     value: function componentDidMount() {
       var _this2 = this;
 
       console.log(this.porps);
-      console.log("%cDidMount", "color:#1890FF");
-      console.log("%c" + JSON.stringify(this.props.value), "color:#F5222D");
+      console.log('%cDidMount', 'color:#1890FF');
+      console.log('%c' + JSON.stringify(this.props.value), 'color:#F5222D');
       if (this.props.value) {
         if (this.props.value.extra_render) {
           var _props$value$extra_re = this.props.value.extra_render,
@@ -638,12 +637,12 @@ var SelectGroup = function (_React$Component) {
       }
     }
   }, {
-    key: "componentWillReceiveProps",
+    key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(nextProps, nextContext) {
       var _this3 = this;
 
-      console.log("%cReceiveProps", "color:#1890FF");
-      console.log("%c" + JSON.stringify(nextProps.value), "color:#F5222D");
+      console.log('%cReceiveProps', 'color:#1890FF');
+      console.log('%c' + JSON.stringify(nextProps.value), 'color:#F5222D');
       if (this.props.value) {
         if (nextProps.value.extra_render) {
           var _nextProps$value$extr = nextProps.value.extra_render,
@@ -671,7 +670,7 @@ var SelectGroup = function (_React$Component) {
       }
     }
   }, {
-    key: "render",
+    key: 'render',
     value: function render() {
       var _this4 = this;
 
@@ -709,13 +708,13 @@ var SelectGroup = function (_React$Component) {
 
       return [_react2.default.createElement(
         _row2.default,
-        { gutter: 15, className: "select-group" },
+        { gutter: 15, className: 'select-group' },
         _react2.default.createElement(
           _col2.default,
           { span: 24 },
           _react2.default.createElement(
-            "pre",
-            { className: "remark-pre" },
+            'pre',
+            { className: 'remark-pre' },
             remark
           )
         ),
@@ -730,26 +729,26 @@ var SelectGroup = function (_React$Component) {
           _react2.default.createElement(
             _card2.default,
             {
-              title: "\u670D\u52A1\u5668\u5217\u8868",
+              title: '\u670D\u52A1\u5668\u5217\u8868',
               extra: [_react2.default.createElement(
                 _dropdown2.default,
-                { overlay: rightMouseMenu, trigger: ["click"] },
+                { overlay: rightMouseMenu, trigger: ['click'] },
                 _react2.default.createElement(
-                  "span",
-                  { className: "action-text" },
-                  "\u79FB\u52A8"
+                  'span',
+                  { className: 'action-text' },
+                  '\u79FB\u52A8'
                 )
-              ), _react2.default.createElement(_divider2.default, { type: "vertical" }), _react2.default.createElement(
-                "span",
-                { className: "action-text", onClick: this.insertGroup.bind(this) },
-                "\u65B0\u589E\u5206\u7EC4"
+              ), _react2.default.createElement(_divider2.default, { type: 'vertical' }), _react2.default.createElement(
+                'span',
+                { className: 'action-text', onClick: this.insertGroup.bind(this) },
+                '\u65B0\u589E\u5206\u7EC4'
               )]
             },
             _react2.default.createElement(
-              "div",
+              'div',
               {
                 style: {
-                  borderBottom: "1px solid #E9E9E9",
+                  borderBottom: '1px solid #E9E9E9',
                   paddingBottom: 5
                 }
               },
@@ -760,14 +759,14 @@ var SelectGroup = function (_React$Component) {
                   onChange: this.onCheckAllChange,
                   checked: checkAll
                 },
-                "\u5168\u9009"
+                '\u5168\u9009'
               )
             ),
-            _react2.default.createElement("br", null),
+            _react2.default.createElement('br', null),
             _react2.default.createElement(
               _checkbox2.default.Group,
               {
-                style: { width: "100%" },
+                style: { width: '100%' },
                 value: hostCheckedKeys,
                 onChange: this.ipsOnCheck.bind(this)
               },
@@ -796,22 +795,22 @@ var SelectGroup = function (_React$Component) {
             return _react2.default.createElement(
               _card2.default,
               {
-                size: "small",
+                size: 'small',
                 title: _react2.default.createElement(
                   _tooltip2.default,
                   { title: item.name },
                   item.name
                 ),
-                className: "group-card",
-                key: "group-card-" + index,
+                className: 'group-card',
+                key: 'group-card-' + index,
                 extra: _this4.oldGroupAppRender(item)
               },
-              item.hosts && item.hosts.map(function (host, index) {
+              Array.isArray(item.hosts) && item.hosts.map(function (host, index) {
                 return _react2.default.createElement(
                   _tag2.default,
                   {
-                    className: "group-tag",
-                    key: item.name + "-" + host + "-" + index,
+                    className: 'group-tag',
+                    key: item.name + '-' + host + '-' + index,
                     closable: true,
                     onClose: function onClose() {
                       return _this4.removeTag(item.id, host);
@@ -827,22 +826,22 @@ var SelectGroup = function (_React$Component) {
           _col2.default,
           { span: 8 },
           haveModule.map(function (item, index) {
-            if (item.type === "advance") {
+            if (item.type === 'advance') {
               return _react2.default.createElement(
                 _card2.default,
                 {
-                  size: "small",
+                  size: 'small',
                   title: item.name,
-                  className: "group-card",
-                  key: "group-card-" + index,
+                  className: 'group-card',
+                  key: 'group-card-' + index,
                   extra: _this4.newGroupAppRender(item)
                 },
-                item.hosts.map(function (host, index) {
+                Array.isArray(item.hosts) && item.hosts.map(function (host, index) {
                   return _react2.default.createElement(
                     _tag2.default,
                     {
-                      className: "group-tag",
-                      key: item.name + "-" + host + "-" + index,
+                      className: 'group-tag',
+                      key: item.name + '-' + host + '-' + index,
                       closable: true,
                       onClose: function onClose() {
                         return _this4.removeTag(item.id, host);
@@ -859,22 +858,22 @@ var SelectGroup = function (_React$Component) {
           _col2.default,
           { span: 8 },
           haveModule.map(function (item, index) {
-            if (item.type === "new") {
+            if (item.type === 'new') {
               return _react2.default.createElement(
                 _card2.default,
                 {
-                  size: "small",
+                  size: 'small',
                   title: item.name,
-                  className: "group-card",
-                  key: "group-card-" + index,
+                  className: 'group-card',
+                  key: 'group-card-' + index,
                   extra: _this4.newGroupAppRender(item)
                 },
-                item.hosts.map(function (host, index) {
+                Array.isArray(item.hosts) && item.hosts.map(function (host, index) {
                   return _react2.default.createElement(
                     _tag2.default,
                     {
-                      className: "group-tag",
-                      key: item.name + "-" + host + "-" + index,
+                      className: 'group-tag',
+                      key: item.name + '-' + host + '-' + index,
                       closable: true,
                       onClose: function onClose() {
                         return _this4.removeTag(item.id, host);
@@ -899,6 +898,6 @@ exports.default = SelectGroup;
 
 SelectGroup.defaultProps = {
   value: {},
-  remark: "asdasdasd",
+  remark: 'asdasdasd',
   onChange: function onChange() {}
 };
