@@ -438,6 +438,20 @@ var YakaEditTable = exports.YakaEditTable = function (_Component) {
 
 				var isOne = dataSource.length === 1;
 
+				// 去除空格
+				if (Array.isArray(_this.props.importTrimFields) && _this.props.importTrimFields.length > 0) {
+					addData.forEach(function (item) {
+						if ((typeof item === 'undefined' ? 'undefined' : _typeof(item)) === "object") {
+							_this.props.importTrimFields.forEach(function (fields) {
+								console.log(fields, item[fields]);
+								if (typeof item[fields] === "string") {
+									item[fields] = item[fields].replace(/\s+/g, "");
+								}
+							});
+						}
+					});
+				}
+
 				_this.setState({
 					dataSource: dataSource.concat(addData),
 					visible: false,

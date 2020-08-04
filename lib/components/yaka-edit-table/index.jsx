@@ -300,6 +300,20 @@ export class YakaEditTable extends Component {
 
 			const isOne = dataSource.length === 1
 
+			// 去除空格
+			if(Array.isArray(this.props.importTrimFields) && this.props.importTrimFields.length > 0){
+				addData.forEach(item=>{
+					if(typeof item === "object"){
+						this.props.importTrimFields.forEach(fields=>{
+							console.log(fields,item[fields])
+							if(typeof item[fields] === "string"){
+								item[fields] = item[fields].replace(/\s+/g,"");
+							}
+						})
+					}
+				})
+			}
+
 			this.setState(
 				{
 					dataSource: dataSource.concat(addData),
