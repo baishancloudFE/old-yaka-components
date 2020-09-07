@@ -38,6 +38,10 @@ var _yakaIpInput = require('./yaka-ip-input');
 
 var _yakaIpInput2 = _interopRequireDefault(_yakaIpInput);
 
+var _yakaImg = require('./yaka-img');
+
+var _yakaImg2 = _interopRequireDefault(_yakaImg);
+
 var _yakaRadio = require('./yaka-radio/');
 
 var _yakaUpload = require('./yaka-upload');
@@ -59,5 +63,6 @@ exports.default = {
   Upload: _yakaUpload2.default,
   MonthPicker: _yakaMonthPicker2.default,
   ServerSubarea: _yakaServerSubarea2.default,
-  IpInput: _yakaIpInput2.default
+  IpInput: _yakaIpInput2.default,
+  Image: _yakaImg2.default
 };
